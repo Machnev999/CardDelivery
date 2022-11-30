@@ -2,18 +2,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
-
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
-public class CardDeliveryTest1 {
+public class CardDeliveryTest2 {
 
     @BeforeEach
     public void setUp() {
@@ -22,7 +21,7 @@ public class CardDeliveryTest1 {
     }
 
 
-    //отправляем пустую форму
+    //отправляем пустую формуу
     @Test
     void emptyFormSent() {
         //нажимаем кнопку забронировать
@@ -36,12 +35,10 @@ public class CardDeliveryTest1 {
     void shouldFormSentSuccessfully() {
         //заполняем поле город
         $("[class='input__control'][placeholder='Город']").setValue("Москва");
-        $("[class='menu-item__control']").click();
         //заполняем поле дата
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, +3);
-        $("[class='input__control'][placeholder='Дата встречи']").setValue("cal.getTime()");
-        $("[class='calendar__day']").click();
+        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
+        String newDate = LocalDate.now().plusDays(5).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        $("[class='input__control'][placeholder='Дата встречи']").setValue(newDate);
         //заполняем поле имя и фамилия
         $("[class='input__control'][name='name']").setValue("Иван Иван");
         //заполняем поле телефон
@@ -53,19 +50,19 @@ public class CardDeliveryTest1 {
 
         //проверка успешной отправки формы
         $("[class='notification__title']").shouldHave(exactText("Успешно!"), Duration.ofSeconds(15));
+        $(".notification__content").shouldBe(visible).shouldHave(exactText("Встреча успешно забронирована на " + newDate));
     }
 
-    //не заполняено имя
+
+    //не заполнено имя
     @Test
     void notFilledName() {
         //заполняем поле город
         $("[class='input__control'][placeholder='Город']").setValue("Москва");
-        $("[class='menu-item__control']").click();
         //заполняем поле дата
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, +3);
         $("[class='input__control'][placeholder='Дата встречи']").setValue("cal.getTime()");
-        $("[class='calendar__day']").click();
         //заполняем поле телефон
         $("[class='input__control'][name='phone']").setValue("+79998887766");
         //ставим галочку согласия
@@ -82,12 +79,10 @@ public class CardDeliveryTest1 {
     void sentNameLatin() {
         //заполняем поле город
         $("[class='input__control'][placeholder='Город']").setValue("Москва");
-        $("[class='menu-item__control']").click();
         //заполняем поле дата
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, +3);
         $("[class='input__control'][placeholder='Дата встречи']").setValue("cal.getTime()");
-        $("[class='calendar__day']").click();
         //заполняем поле имя и фамилия
         $("[class='input__control'][name='name']").setValue("Ivan Ivan");
         //заполняем поле телефон
@@ -108,7 +103,6 @@ public class CardDeliveryTest1 {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, +3);
         $("[class='input__control'][placeholder='Дата встречи']").setValue("cal.getTime()");
-        $("[class='calendar__day']").click();
         //заполняем поле имя и фамилия
         $("[class='input__control'][name='name']").setValue("Ivan Ivan");
         //заполняем поле телефон
@@ -127,12 +121,11 @@ public class CardDeliveryTest1 {
     void notFilledPhone() {
         //заполняем поле город
         $("[class='input__control'][placeholder='Город']").setValue("Москва");
-        $("[class='menu-item__control']").click();
         //заполняем поле дата
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, +3);
         $("[class='input__control'][placeholder='Дата встречи']").setValue("cal.getTime()");
-        $("[class='calendar__day']").click();
+        // $("[class='calendar__day']").click();
         //заполняем поле имя и фамилия
         $("[class='input__control'][name='name']").setValue("Иван Иван");
         //ставим галочку согласия
@@ -149,12 +142,10 @@ public class CardDeliveryTest1 {
     void sentPhone3() {
         //заполняем поле город
         $("[class='input__control'][placeholder='Город']").setValue("Москва");
-        $("[class='menu-item__control']").click();
         //заполняем поле дата
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, +3);
         $("[class='input__control'][placeholder='Дата встречи']").setValue("cal.getTime()");
-        $("[class='calendar__day']").click();
         //заполняем поле имя и фамилия
         $("[class='input__control'][name='name']").setValue("Иван Иван");
         //заполняем поле телефон
@@ -173,12 +164,10 @@ public class CardDeliveryTest1 {
     void notClick() {
         //заполняем поле город
         $("[class='input__control'][placeholder='Город']").setValue("Москва");
-        $("[class='menu-item__control']").click();
         //заполняем поле дата
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, +3);
         $("[class='input__control'][placeholder='Дата встречи']").setValue("cal.getTime()");
-        $("[class='calendar__day']").click();
         //заполняем поле имя и фамилия
         $("[class='input__control'][name='name']").setValue("Иван Иван");
         //заполняем поле телефон
@@ -195,7 +184,6 @@ public class CardDeliveryTest1 {
     void notFilledData() {
         //заполняем поле город
         $("[class='input__control'][placeholder='Город']").setValue("Москва");
-        $("[class='menu-item__control']").click();
         //чистка поля с датой по умолчанию
         $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
         //заполняем поле имя и фамилия
@@ -211,22 +199,18 @@ public class CardDeliveryTest1 {
         $("[data-test-id='date'] [class='input__sub']").shouldHave(exactText("Неверно введена дата"), Duration.ofSeconds(15));
     }
 
-    //заполняем дату задним числом
+    //заполняем дату, задним числом
     @Test
     void enterLessCurrentDate() {
         //заполняем поле город
         $("[class='input__control'][placeholder='Город']").setValue("Москва");
-        $("[class='menu-item__control']").click();
         //чистка поля с датой по умолчанию
         $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
         //вводим дату
+        //кликаем по полю с датой
         $("[data-test-id='date'] input").click();
-
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MONTH, -1);
-        String newDate = dateFormat.format(cal.getTime());
-
+        //вчитаем 7 дней из текущей даты
+        String newDate = LocalDate.now().minusDays(7).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         $("[data-test-id='date'] input").setValue(newDate);
         //заполняем поле имя и фамилия
         $("[class='input__control'][name='name']").setValue("Иван Иван");
