@@ -21,7 +21,7 @@ public class CardDeliveryTest2 {
     }
 
 
-    //отправляем пустую форму
+    //отправляем пустую формуу
     @Test
     void emptyFormSent() {
         //нажимаем кнопку забронировать
